@@ -45,7 +45,7 @@ public class Game {
             /**
              * El jugador ataca al enemigo
              */
-            player.attack(enemy);
+            player.attack(enemy, 34);
             if (enemy.isAlive()) {
                 /**
                  * El enemigo contraataca si sigue vivo
