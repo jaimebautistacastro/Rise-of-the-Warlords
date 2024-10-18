@@ -15,10 +15,10 @@ import rpg.items.armors.Armor;
 import rpg.items.armors.IronArmor;
 import rpg.items.armors.WoodArmor;
 import rpg.items.miscs.Misc;
-//import rpg.items.miscs.WolfPelt;
 import rpg.items.weapons.Weapon;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -37,6 +37,7 @@ public class GameUI extends JFrame {
         /**
          * Configuración de la ventana
          */
+
         setTitle("Rise of the Warlords");
         setSize(800, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,13 +45,16 @@ public class GameUI extends JFrame {
         /**
          * Crear área de texto para mostrar el registro del juego
          */
+
         gameLog = new JTextArea();
         gameLog.setEditable(false);
+        gameLog.setFont(new Font("Serif", Font.PLAIN, 16)); // Configurar la fuente del JTextArea
         JScrollPane scrollPane = new JScrollPane(gameLog);
 
         /**
          * Crear botón de Ataque
          */
+
         attackButton = new JButton("Atacar");
         attackButton.addActionListener(new ActionListener() {
             @Override
@@ -65,6 +69,7 @@ public class GameUI extends JFrame {
         /**
          * Añadir el área de texto y el botón al marco
          */
+
         add(scrollPane, "Center");
         add(attackButton, "South");
 
@@ -75,84 +80,134 @@ public class GameUI extends JFrame {
     }
 
     /**
+     * Función para mostrar el mensaje de bienvenida
+     */
+    private void showWelcomeMessage() {
+        appendToLog("¡Bienvenido a Rise of the Warlords!");
+        appendToLog("Tu aventura comienza entre " + player.getName() + " y " + enemy.getName() + ".");
+        appendToLog(player.getName() + " empieza con " + player.getLife() + " puntos de vida.");
+        appendToLog(enemy.getName() + " empieza con " + enemy.stats.get(Stats.HP) + " puntos de vida.");
+    }
+
+    /**
      * Función para controlar el ataque del jugador
      */
     private void playerAttack() {
-        int playerDamage = player.attack(enemy, 10);
-        appendToLog(player.getName() + " Ataca " + enemy.getName() + " generando " + playerDamage + " puntos de daño. "  + enemy.getName() + "Tiene " + enemy.stats.get(Stats.HP) + " puntos de vida");
 
+        /**
+         * Verificar si el jugador o el enemigo están muertos antes de atacar
+         */
+        if (player.isDead()) {
+            displayGameOverMessage(player.getName() + " está derrotado! El juego ha terminado.");
+            attackButton.setEnabled(false);
+            return;
+        }
+
+        /**
+         * Ataque del jugador
+         */
+        int playerDamage = player.attack(enemy, 10);
+        enemy.takeDamage(playerDamage); // Aplicar daño al enemigo
+        appendToLog(player.getName() + " ataca a " + enemy.getName() + " generando " + playerDamage + " puntos de daño. " +
+                enemy.getName() + " tiene " + enemy.stats.get(Stats.HP) + " puntos de vida restantes.");
+
+        /**
+         * Verificar si el enemigo está muerto
+         */
 
         if (enemy.isDead()) {
-            appendToLog(enemy.getName() + " Está derrotado ");
-            /**
-             * Deshabilitar el botón si el enemigo está muerto
-             */
-            attackButton.setEnabled(false);
+            appendToLog(enemy.getName() + " está derrotado.");
+            attackButton.setEnabled(false); // Desactivar el botón
+            displayGameOverMessage(player.getName() + " ha ganado el juego!");
         } else {
+
             /**
-             * Retrasar contraataque del enemigo
+             * Retrasar el contraataque del enemigo
              */
+
             Timer enemyAttackTimer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     enemyAttack();
                 }
             });
-
-            /**
-             * Solo ejecuta una vez
-             */
             enemyAttackTimer.setRepeats(false);
             enemyAttackTimer.start();
         }
     }
 
     /**
-     * Función para controlar contraataque del enemigo
+     * Función para controlar el contraataque del enemigo
      */
+
     private void enemyAttack() {
+
+        /**
+         * Verificar si el jugador está muerto antes de atacar
+         */
+
+        if (enemy.isDead()) {
+            displayGameOverMessage("El juego ha terminado.");
+            attackButton.setEnabled(false);
+            return;
+        }
+
+        /**
+         * Ataque del enemigo
+         */
+
         int enemyDamage = enemy.attack(player);
-        appendToLog(enemy.getName() + " Ataca " + player.getName() + " generando " + enemyDamage + " puntos de daño." + player.getName() + "Tiene " + player.getLife() + " puntos de vida");
+        player.takeDamage(enemyDamage);
+        appendToLog(enemy.getName() + " ataca a " + player.getName() + " generando " + enemyDamage + " puntos de daño. " +
+                player.getName() + " tiene " + player.getLife() + " puntos de vida restantes.");
+
+        /**
+         * Verificar si el jugador está muerto
+         */
 
         if (player.isDead()) {
-            appendToLog(player.getName() + " Esta derrotado! El juego ha terminado.");
-            /**
-             * Deshabilitar el botón si el jugador está muerto
-             */
-            attackButton.setEnabled(false);
+            appendToLog(player.getName() + " está derrotado! El juego ha terminado.");
+            attackButton.setEnabled(false); // Desactivar el botón
+            displayGameOverMessage(enemy.getName() + " ha ganado el juego!");
         }
+    }
+
+    /**
+     * Función para mostrar el mensaje de fin del juego
+     * @param message
+     */
+
+    private void displayGameOverMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Fin del Juego", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * Función para comenzar el juego y mostrar su ventana
      */
-    public void starGame() {
+
+    public void startGame() {
         setVisible(true);
-        appendToLog("El juego comienza entre " + player.getName() + " y " + enemy.getName() + " ");
-        appendToLog(player.getName() + " Empieza con " + player.getLife());
-        appendToLog(enemy.getName() + " Empieza con " + enemy.stats.get(Stats.HP));
+        showWelcomeMessage();
+    }
+
+    public void displayMessage(String message) {
+        appendToLog(message);
     }
 
     /**
      * Función para agregar texto al log del juego
+     * @param text
      */
+
     public void appendToLog(String text) {
         gameLog.append(text + "\n");
     }
 
     /**
-     * Método para mostrar un mensaje específico en el área de texto
+     *  Función para crear un enemigo aleatorio
+     * @return
      */
-    public void displayMessage(String message) {
-        /**
-         * Reutilizar appenToLog para mostrar el mensaje
-         */
-        appendToLog(message);
-    }
 
-    /**
-     * Método para crear un enemigo aleatorio
-     */
     private static Enemy createRandomEnemy() {
         Random rand = new Random();
         int enemyType = rand.nextInt(5);
@@ -163,11 +218,11 @@ public class GameUI extends JFrame {
             case 1:
                 return new Orc("Orc Salvaje");
             case 2:
-                return new Dragon("Dragon Imponente");
+                return new Dragon("Dragón Imponente");
             case 3:
                 return new Troll("Troll Feroz");
             case 4:
-                return new Skeleton("Skeleton Oscuro");
+                return new Skeleton("Esqueleto Oscuro");
             default:
                 return null;
         }
@@ -175,56 +230,43 @@ public class GameUI extends JFrame {
 
     /**
      * Función principal
+     * @param args
      */
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-
-            /**
-             * Crear un enemigo aleatorio
-             */
             Enemy enemy = createRandomEnemy();
 
-                    Inventory inventory = new Inventory(10);
+            Inventory inventory = new Inventory(10);
+            Armor armor = new IronArmor("Bronce", "Armadura básica", 450, 34, 32, "Defensa");
+            inventory.addItem(armor);
 
-                    Armor armor = new IronArmor("Bronce", "Armadura basica", 450, 34, 32, "Defensa");
-                    inventory.addItem(armor);
+            Weapon weapon = new Weapon("Pistola", "Arma de distancia", 555, WeaponType.CROSSBOW);
+            inventory.addItem(weapon);
 
-                    Weapon weapon = new Weapon("Pistola", "Arma de distancia", 555, WeaponType.CROSSBOW);
-                    inventory.addItem(weapon);
+            Misc misc = new Misc("Poción", "Curación", 455, "Curación rápida", 10, 1, ItemType.MISC);
+            inventory.addItem(misc);
 
-                    Misc misc = new Misc("Pocima", "Curacion", 455, "Curacion rapida", 10, 1, ItemType.MISC);
-                    inventory.addItem(misc);
-                    // Creacion del personaje
-                    Player player = new Player("Zelda");
-                    // Usando una pocion curativa
-                    player.usePotion(misc.getPotency());
-                    // Usando un ataque de arma
-                    player.equipWeapon(20);
-                    // Equipamos una defensa
-                    player.equipArmor(3);
+            /**
+             * Creación del personaje
+             */
 
-                    // Creacion del juego
-                    GameUI gameUI = new GameUI(player, enemy);
+            Player player = new Player("Zelda");
+            player.usePotion(misc.getPotency());
+            player.equipWeapon(20);
+            player.equipArmor(3);
 
-                    System.out.println("Armors in inventory:");
-                    for (Armor a : inventory.getArmors()) {
-                        System.out.println(a.getName());
-                    }
+            /**
+             * Creación del juego
+             */
 
-                    System.out.println("Miscs in inventory:");
-                    for (Misc m : inventory.getMiscs()) {
-                        System.out.println(m.getName());
-                    }
-
-                    System.out.println("Weapons in inventory:");
-                    for (Weapon w : inventory.getWeapons()) {
-                        System.out.println(w.getName());
-                    }
+            GameUI gameUI = new GameUI(player, enemy);
 
             /**
              * Iniciar el juego
              */
-            gameUI.starGame();
+
+            gameUI.startGame();
         });
     }
 }

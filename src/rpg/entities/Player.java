@@ -60,6 +60,15 @@ public class Player {
         System.out.println(this.name + " recibe " + reducedDamage + " de daño tras aplicar la defensa. Vida restante: " + this.stats.get(Stats.HP));
     }
 
+    private int life;
+
+    public void takeDamage (int damage){
+        life = damage;
+        if (life < 0){
+            life = 0;
+        }
+    }
+
     // Comprobar si el jugador está muerto
     public boolean isDead() {
         return this.stats.get(Stats.HP) <= 0;

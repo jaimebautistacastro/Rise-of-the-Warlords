@@ -49,6 +49,24 @@ public class Enemy extends GameCharacter {
         return this.enemyType;
     }
 
+    public int getInitialHP (){
+        return getInitialHP();
+    }
+
+    private int life;
+
+    public void takeDamage (int damage){
+         life = damage;
+         if (life <0){
+             life =0;
+         }
+
+    }
+
+    public boolean isDead () {
+        return life <= 0;
+    }
+
     /**
      * Función para atacar al jugador
      */
@@ -59,20 +77,4 @@ public class Enemy extends GameCharacter {
         return attackPower;
     }
 
-    /**
-     * Función para recibir daño
-     */
-    public void receiveDamage(int damage) {
-        int currentHP = this.stats.get(Stats.HP);
-        this.stats.put(Stats.HP, currentHP - damage);
-        System.out.println(this.name + " receives " + damage + " damage. Remaining HP: " + this.stats.get(Stats.HP));
-    }
-
-    /**
-     * Función para corroborar que el enemigo está muerto
-     */
-    @Override
-    public boolean isDead() {
-        return this.stats.get(Stats.HP) <= 0;
-    }
 }
