@@ -1,103 +1,64 @@
 package rpg.gui;
 
-import javax.swing.*;
+import rpg.gui.buttons.BaseButton;
+import rpg.gui.panels.BottomPanel;
+import rpg.gui.panels.MiddlePanel;
+import rpg.gui.panels.TopPanel;
 
+import javax.swing.*;
 import java.awt.*;
 
-import static rpg.gui.WindowConstants.WINDOW_SIZE;
+public class MainWindow extends JFrame {
 
-public class MainWindow  extends JFrame {
+    private static final Dimension WINDOW_SIZE = new Dimension(1024,768);
     private JPanel mainPanel;
+    private JPanel TopPanel;
+    private JPanel MiddlePanel;
+    private JPanel BottomPanel;
+    private JButton button1;
+    private JButton Tienda;
+    private JButton Inventario;
+    private JButton Atacar;
+    private JButton Skills;
+    private JButton Huir;
+    private JDesktopPane desktopPane;
 
     public MainWindow (){
+        setTitle("Rise of the Warlords");
+        setSize(WINDOW_SIZE);
 
-        /**
-         * Crear panel principal
-         */
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-
-        /**
-         * Crear la barra de estado
-         */
-
-        JPanel statusBar = new JPanel();
-        statusBar.setBackground(Color.LIGHT_GRAY);
-        statusBar.add(new JLabel("Vida: 100% | Nivel: 1" ));
-        statusBar.setPreferredSize(new Dimension(WINDOW_SIZE.width,150));
-
-        /**
-         * Crear el panel del juego
-         */
-
-        JPanel gamePanel = new JPanel();
-        gamePanel.setBackground(Color.WHITE);
-        /**
-         * Se utiliza un GridLayout para determinar la zona de juego
-         */
-        gamePanel.setLayout(new GridLayout(1,1));
-        gamePanel.add(new JLabel("Area de Juego"));
-        gamePanel.setPreferredSize(new Dimension(WINDOW_SIZE.width,730));
-
-        /**
-         * Crear la barra de acción
-         */
-
-        JPanel actionBar = new JPanel();
-        actionBar.setBackground(Color.CYAN);
-        actionBar.setLayout(new BorderLayout());
-        actionBar.setPreferredSize(new Dimension(WINDOW_SIZE.width,340));
-
-        /**
-         * Anexar botones de acción a la barra de acción
-         */
-
-        JPanel actionButtons = new JPanel();
-        actionButtons.setLayout(new FlowLayout());
-        actionButtons.add(new JButton("Atacar"));
-        actionButtons.add(new JButton("Defender"));
-        actionButtons.add(new JButton("Usar Artículo"));
-
-        /**
-         * Mostrar mensaje al jugador en la barra de acción
-         */
-
-        JTextArea messageArea = new JTextArea(3,30);
-        messageArea.setEditable(false);
-        messageArea.setText("¡Buena Suerte!");
-
-        /**
-         * Añadir los botones y mensaje a la barra de acción
-         */
-
-        actionBar.add(actionButtons, BorderLayout.NORTH);
-        actionBar.add(new JScrollPane(messageArea), BorderLayout.SOUTH);
-
-        /**
-         * Añadir los paneles al panel principal
-         */
-
-        mainPanel.add(statusBar,BorderLayout.NORTH);
-        mainPanel.add(gamePanel, BorderLayout.CENTER);
-        mainPanel.add(actionBar, BorderLayout.SOUTH);
-
-        /**
-         * Establecer el panel principal como contenido de la ventana
-         */
-
-        this.setContentPane(mainPanel);
-
-        this.setTitle(" Rise of the Warlords ");
-        this.setSize(WINDOW_SIZE);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(mainPanel);
+        setVisible(true);
     }
 
-    public static void main (String [] args){
-        SwingUtilities.invokeLater(() -> {
-            MainWindow window = new MainWindow();
-            window.setVisible(true);
+    private void initComponents(){
+        desktopPane = new JDesktopPane();
+        desktopPane.setPreferredSize(mainPanel != null ? mainPanel.getPreferredSize() : null);
+        mainPanel.setBounds(0,0,mainPanel.getPreferredSize().width, mainPanel.getPreferredSize().height);
+        desktopPane.add(mainPanel, JLayeredPane.DEFAULT_LAYER);
+        setContentPane(desktopPane);
+        setTitle("Rise of the Warlords");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(false);
+    }
 
-        });
+    public static void main (String[] args){
+        new MainWindow();
+    }
+
+    private void createUIComponents(){
+        TopPanel = new TopPanel();
+        MiddlePanel = new MiddlePanel();
+        BottomPanel = new BottomPanel();
+        button1 = new BaseButton("Button 1");
+        Tienda = new BaseButton("Tienda");
+        Inventario = new BaseButton("Inventario");
+        Atacar = new BaseButton("Atacar");
+        Huir = new BaseButton("Huir");
+        Skills = new BaseButton("Skils");
     }
 }
