@@ -11,7 +11,7 @@ public class MiddlePanel extends BackgroundPanel {
     @Override
     protected void init() {
         // Cargar la imagen usando ImageCache
-        BufferedImage bufferedImage = ImageCache.addImage("middlePanel", "Fondodepelea.png");
+        BufferedImage bufferedImage = ImageCache.addImage("middlePanel", "fondomiddlepanel.png");
         if (bufferedImage != null) {
             backgroundImage = new ImageIcon(bufferedImage);
         } else {

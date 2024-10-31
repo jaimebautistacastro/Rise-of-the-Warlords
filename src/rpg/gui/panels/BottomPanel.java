@@ -11,7 +11,7 @@ public class BottomPanel extends BackgroundPanel {
     @Override
     protected void init() {
         // Cargar la imagen usando ImageCache
-        BufferedImage bufferedImage = ImageCache.addImage("bottomPanel", "FondoBottom.png");
+        BufferedImage bufferedImage = ImageCache.addImage("bottomPanel", "TopPanel.png");
         if (bufferedImage != null) {
             backgroundImage = new ImageIcon(bufferedImage);
         } else {

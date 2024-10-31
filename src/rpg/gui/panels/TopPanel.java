@@ -11,7 +11,7 @@ public class TopPanel extends BackgroundPanel {
     @Override
     protected void init() {
         // Cargar la imagen usando ImageCache
-        BufferedImage bufferedImage = ImageCache.addImage("topPanel", "Fondodebarradevida.png");
+        BufferedImage bufferedImage = ImageCache.addImage("topPanel", "BottomPanel.png");
         if (bufferedImage != null) {
             backgroundImage = new ImageIcon(bufferedImage);
         } else {
