@@ -1,6 +1,9 @@
 package rpg.gui;
 
-import rpg.gui.buttons.BaseButton;
+import rpg.enums.BarType;
+import rpg.gui.buttons.*;
+import rpg.gui.labels.BarLabel;
+import rpg.gui.labels.PortraitLabel;
 import rpg.gui.panels.BottomPanel;
 import rpg.gui.panels.MiddlePanel;
 import rpg.gui.panels.TopPanel;
@@ -16,12 +19,18 @@ public class MainWindow extends JFrame {
     private JPanel MiddlePanel;
     private JPanel BottomPanel;
     private JButton button1;
-    private JButton Tienda;
-    private JButton Inventario;
-    private JButton Atacar;
-    private JButton Skills;
-    private JButton Huir;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private SaveGame saveGame;
+    private Exit exit;
+    private Inventory inventory;
+    private Statistics statistics;
     private JDesktopPane desktopPane;
+    private PortraitLabel portraitLabel;
+    private BarLabel lifeLabel;
+    private BarLabel magicLabel;
+    private BarLabel explabel;
 
     public MainWindow (){
         setTitle("Rise of the Warlords");
@@ -44,6 +53,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+
     }
 
     public static void main (String[] args){
@@ -54,11 +64,14 @@ public class MainWindow extends JFrame {
         TopPanel = new TopPanel();
         MiddlePanel = new MiddlePanel();
         BottomPanel = new BottomPanel();
-        button1 = new BaseButton("Button 1");
-        Tienda = new BaseButton("Tienda");
-        Inventario = new BaseButton("Inventario");
-        Atacar = new BaseButton("Atacar");
-        Huir = new BaseButton("Huir");
-        Skills = new BaseButton("Skils");
+        button1 = new SaveGame();
+        button2 = new Statistics();
+        button3 = new Inventory();
+        button4 = new Exit();
+        portraitLabel = new PortraitLabel();
+        TopPanel.add(portraitLabel);
+        lifeLabel = new BarLabel(100, 100, BarType.LIFE);
+        magicLabel = new BarLabel(30, 100, BarType.MAGIC);
+        explabel = new BarLabel(0, 350, BarType.EXPERIENCE);
     }
 }
