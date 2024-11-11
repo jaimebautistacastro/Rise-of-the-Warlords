@@ -55,17 +55,18 @@ public class Enemy extends GameCharacter {
 
     private int life;
 
-    public void takeDamage (int damage){
-         life = damage;
-         if (life <0){
-             life =0;
-         }
-
+    public void takeDamage(int damage) {
+        this.stats.put(Stats.HP, this.stats.get(Stats.HP) - damage);
+        if (this.stats.get(Stats.HP) < 0) {
+            this.stats.put(Stats.HP, 0);  // Asegura que no pase de cero
+        }
     }
 
-    public boolean isDead () {
-        return life <= 0;
+
+    public boolean isDead() {
+        return this.stats.get(Stats.HP) <= 0;
     }
+
 
     /**
      * Función para atacar al jugador

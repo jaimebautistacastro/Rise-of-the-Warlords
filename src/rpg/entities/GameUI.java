@@ -1,5 +1,7 @@
 package rpg.entities;
 
+import javax.swing.ImageIcon;
+
 import rpg.Game;
 import rpg.entities.enemy.Enemy;
 import rpg.entities.enemy.Goblin.Goblin;
@@ -30,54 +32,84 @@ public class GameUI extends JFrame {
     private Enemy enemy;
     private Game game;
 
+    private JProgressBar playerHealthBar;
+    private JProgressBar enemyHealthBar;
+
     public GameUI(Player player, Enemy enemy) {
         this.player = player;
         this.enemy = enemy;
 
-        /**
-         * Configuración de la ventana
-         */
-
+        // Configuración de la ventana
         setTitle("Rise of the Warlords");
         setSize(800, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        /**
-         * Crear área de texto para mostrar el registro del juego
-         */
-
+        // Crear área de texto para mostrar el registro del juego
         gameLog = new JTextArea();
         gameLog.setEditable(false);
         gameLog.setFont(new Font("Serif", Font.PLAIN, 16)); // Configurar la fuente del JTextArea
         JScrollPane scrollPane = new JScrollPane(gameLog);
 
-        /**
-         * Crear botón de Ataque
-         */
-
+        // Crear botón de Ataque
         attackButton = new JButton("Atacar");
         attackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * Cuando el jugador ataca
-                 */
                 playerAttack();
             }
         });
 
-        /**
-         * Añadir el área de texto y el botón al marco
-         */
+        // Crear las imágenes y redimensionarlas
+        ImageIcon playerIcon = new ImageIcon("resources/images/player.png");
+        Image playerImage = playerIcon.getImage(); // Obtener la imagen de ImageIcon
+        Image resizedPlayerImage = playerImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Redimensionar
+        JLabel playerImageLabel = new JLabel(new ImageIcon(resizedPlayerImage));
 
-        add(scrollPane, "Center");
-        add(attackButton, "South");
+        ImageIcon enemyIcon = new ImageIcon("resources/images/enemy.png");
+        Image enemyImage = enemyIcon.getImage();
+        Image resizedEnemyImage = enemyImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Redimensionar
+        JLabel enemyImageLabel = new JLabel(new ImageIcon(resizedEnemyImage));
 
-        /**
-         * Iniciar el juego
-         */
+        // Crear las barras de vida para cada personaje
+        playerHealthBar = new JProgressBar(0, player.getLife());  // Configura el rango de la barra
+        playerHealthBar.setValue(player.getLife());  // Establece el valor inicial
+        playerHealthBar.setStringPainted(true);  // Mostrar el porcentaje en la barra
+        playerHealthBar.setForeground(Color.GREEN);  // Color verde para vida
+
+        enemyHealthBar = new JProgressBar(0, enemy.stats.get(Stats.HP));  // Configura el rango de la barra
+        enemyHealthBar.setValue(enemy.stats.get(Stats.HP));  // Establece el valor inicial
+        enemyHealthBar.setStringPainted(true);  // Mostrar el porcentaje en la barra
+        enemyHealthBar.setForeground(Color.RED);  // Color rojo para vida
+
+        // Crear un panel para las imágenes con espacio personalizado
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 0)); // Ajusta el espaciado horizontal (50 píxeles)
+
+        // Agregar las imágenes al panel
+        imagePanel.add(playerImageLabel);
+        imagePanel.add(enemyImageLabel);
+
+        // Crear un panel para las barras de vida
+        JPanel healthPanel = new JPanel();
+        healthPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10)); // Espaciado vertical de 10 píxeles
+
+        // Agregar las barras de vida al panel
+        healthPanel.add(playerHealthBar);
+        healthPanel.add(enemyHealthBar);
+
+        // Establecer el layout y agregar los componentes
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
+        add(attackButton, BorderLayout.SOUTH);
+        add(imagePanel, BorderLayout.NORTH); // Mostrar las imágenes en la parte superior
+        add(healthPanel, BorderLayout.CENTER); // Mostrar las barras de vida en el centro
+
+        // Iniciar el juego
         game = new Game(player, enemy, this);
     }
+
+
+
 
     /**
      * Función para mostrar el mensaje de bienvenida
@@ -93,84 +125,67 @@ public class GameUI extends JFrame {
      * Función para controlar el ataque del jugador
      */
     private void playerAttack() {
-
-        /**
-         * Verificar si el jugador o el enemigo están muertos antes de atacar
-         */
+        // Verificar si el jugador o el enemigo están muertos antes de atacar
         if (player.isDead()) {
             displayGameOverMessage(player.getName() + " está derrotado! El juego ha terminado.");
             attackButton.setEnabled(false);
             return;
         }
 
-        /**
-         * Ataque del jugador
-         */
+        // Ataque del jugador
         int playerDamage = player.attack(enemy, 10);
-        enemy.takeDamage(playerDamage); // Aplicar daño al enemigo
+        enemy.takeDamage(playerDamage);  // Aplicar daño al enemigo
         appendToLog(player.getName() + " ataca a " + enemy.getName() + " generando " + playerDamage + " puntos de daño. " +
                 enemy.getName() + " tiene " + enemy.stats.get(Stats.HP) + " puntos de vida restantes.");
 
-        /**
-         * Verificar si el enemigo está muerto
-         */
-
+        // Verificar si el enemigo está muerto después del ataque
         if (enemy.isDead()) {
             appendToLog(enemy.getName() + " está derrotado.");
-            attackButton.setEnabled(false); // Desactivar el botón
+            attackButton.setEnabled(false);  // Desactivar el botón
             displayGameOverMessage(player.getName() + " ha ganado el juego!");
-        } else {
-
-            /**
-             * Retrasar el contraataque del enemigo
-             */
-
-            Timer enemyAttackTimer = new Timer(2000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    enemyAttack();
-                }
-            });
-            enemyAttackTimer.setRepeats(false);
-            enemyAttackTimer.start();
+            return;  // No continuar con el resto del código si el enemigo está muerto
         }
+
+        // Actualizar la barra de vida del enemigo
+        enemyHealthBar.setValue(enemy.stats.get(Stats.HP));  // Actualizar la barra de vida del enemigo
+
+        // Retrasar el contraataque del enemigo
+        Timer enemyAttackTimer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                enemyAttack();
+            }
+        });
+        enemyAttackTimer.setRepeats(false);
+        enemyAttackTimer.start();
     }
 
-    /**
-     * Función para controlar el contraataque del enemigo
-     */
 
     private void enemyAttack() {
-
-        /**
-         * Verificar si el jugador está muerto antes de atacar
-         */
-
+        // Verificar si el jugador está muerto antes de atacar
         if (enemy.isDead()) {
             displayGameOverMessage("El juego ha terminado.");
             attackButton.setEnabled(false);
             return;
         }
 
-        /**
-         * Ataque del enemigo
-         */
-
+        // Ataque del enemigo
         int enemyDamage = enemy.attack(player);
         player.takeDamage(enemyDamage);
         appendToLog(enemy.getName() + " ataca a " + player.getName() + " generando " + enemyDamage + " puntos de daño. " +
                 player.getName() + " tiene " + player.getLife() + " puntos de vida restantes.");
 
-        /**
-         * Verificar si el jugador está muerto
-         */
+        // Actualizar la barra de vida del jugador
+        playerHealthBar.setValue(player.getLife());  // Actualizar la barra de vida del jugador
 
+        // Verificar si el jugador está muerto
         if (player.isDead()) {
             appendToLog(player.getName() + " está derrotado! El juego ha terminado.");
-            attackButton.setEnabled(false); // Desactivar el botón
+            attackButton.setEnabled(false);  // Desactivar el botón
             displayGameOverMessage(enemy.getName() + " ha ganado el juego!");
         }
     }
+
 
     /**
      * Función para mostrar el mensaje de fin del juego
@@ -200,8 +215,9 @@ public class GameUI extends JFrame {
      */
 
     public void appendToLog(String text) {
-        gameLog.append(text + "\n");
+        SwingUtilities.invokeLater(() -> gameLog.append(text + "\n"));
     }
+
 
     /**
      *  Función para crear un enemigo aleatorio
@@ -235,8 +251,10 @@ public class GameUI extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            // Crear enemigo aleatorio
             Enemy enemy = createRandomEnemy();
 
+            // Configuración de inventario y personajes
             Inventory inventory = new Inventory(10);
             Armor armor = new IronArmor("Bronce", "Armadura básica", 450, 34, 32, "Defensa");
             inventory.addItem(armor);
@@ -247,26 +265,16 @@ public class GameUI extends JFrame {
             Misc misc = new Misc("Poción", "Curación", 455, "Curación rápida", 10, 1, ItemType.MISC);
             inventory.addItem(misc);
 
-            /**
-             * Creación del personaje
-             */
-
             Player player = new Player("Zelda");
             player.usePotion(misc.getPotency());
             player.equipWeapon(20);
             player.equipArmor(3);
 
-            /**
-             * Creación del juego
-             */
-
+            // Crear la interfaz de usuario del juego
             GameUI gameUI = new GameUI(player, enemy);
 
-            /**
-             * Iniciar el juego
-             */
-
-            gameUI.startGame();
+            // Iniciar el juego
+            gameUI.startGame();  // Asegúrate de que esto se llame después de configurar la UI
         });
     }
 }

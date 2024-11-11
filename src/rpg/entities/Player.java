@@ -74,6 +74,7 @@ public class Player {
         return this.stats.get(Stats.HP) <= 0;
     }
 
+
     // Comprobar si el jugador está vivo
     public boolean isAlive() {
         return this.stats.get(Stats.HP) > 0;
