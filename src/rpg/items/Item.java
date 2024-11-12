@@ -2,18 +2,44 @@ package rpg.items;
 
 import rpg.enums.ItemType;
 
-public abstract class Item {
-    protected String name;
-    protected String description;
-    protected int price;
-    protected ItemType itemType;
+import java.io.Serializable;
 
-    public Item(String name, String description, int price, ItemType itemType) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.itemType = itemType;
+/**
+ * The type Item.
+ */
+public abstract class Item implements Serializable {
+
+    /**
+     * The Name.
+     */
+    protected String name;
+    /**
+     * The Description.
+     */
+    protected String description;
+    /**
+     * The Price.
+     */
+    protected int price;
+    /**
+     * The Type.
+     */
+    protected ItemType type;
+
+    /**
+     * Constructor de la clase Item. Inicializa los atributos de la clase mediante
+     * la función initItem().
+     */
+    public Item() {
+
+        initItem();
     }
+
+    /**
+     * Función que inicializa los atributos de la clase actual.
+     * Deberá ser implementada y sobreescrita por las clases hijas.
+     */
+    protected abstract void initItem();
 
     public String getName() {
         return name;
@@ -27,7 +53,7 @@ public abstract class Item {
         return price;
     }
 
-    public ItemType getItemType() {
-        return itemType;
+    public ItemType getType() {
+        return type;
     }
 }

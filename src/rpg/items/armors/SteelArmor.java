@@ -9,7 +9,9 @@ public class SteelArmor extends Armor {
     private int durability;
 
     public SteelArmor(String name, String description, int price, int defense, int durability, String typeArmor) {
-        super(name, description, price, ItemType.ARMOR);
+        this.name=name;
+        this.description=description;
+        this.price=price;
         this.typeArmor = typeArmor;
         this.defense = defense;
         this.durability = durability;
@@ -22,5 +24,10 @@ public class SteelArmor extends Armor {
     @Override
     public String toString() {
         return super.toString() + " - Type: " + typeArmor;
+    }
+
+    @Override
+    protected void initItem() {
+
     }
 }

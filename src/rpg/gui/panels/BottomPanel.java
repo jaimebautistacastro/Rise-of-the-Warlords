@@ -1,27 +1,18 @@
 package rpg.gui.panels;
 
-import rpg.Utils.cache.ImageCache;
-import rpg.gui.WindowConstants;
+import rpg.gui.UIConstants;
+import rpg.utils.cache.ImageCache;
 
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 
 public class BottomPanel extends BackgroundPanel {
 
     @Override
     protected void init() {
-        // Cargar la imagen usando ImageCache
-        BufferedImage bufferedImage = ImageCache.addImage("bottomPanel", "TopPanel.png");
-        if (bufferedImage != null) {
-            backgroundImage = new ImageIcon(bufferedImage);
-        } else {
-            // Mejor manejo del error en caso de que la imagen no se cargue
-            JOptionPane.showMessageDialog(this, "Error: No se pudo cargar la imagen.",
-                    "Error de imagen", JOptionPane.ERROR_MESSAGE);
-        }
-
-        // Configurar dimensiones y borde
-        setDimension(WindowConstants.BOTTOM_DIMENSION); // Asegúrate de definir esta constante en WindowConstants
-        setBorder(WindowConstants.EMPTY_BORDER);
+        // Buscamos la imagen por ahora directamente en los directorios
+        backgroundImage = new ImageIcon(ImageCache.addImage("bottomPanel",
+                "panels/battlePanel.png"));
+        setDimension(UIConstants.MIDDLE_DIMENSION);
+        setBorder(UIConstants.EMPTY_BORDER);
     }
 }

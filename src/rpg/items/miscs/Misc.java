@@ -1,37 +1,58 @@
 package rpg.items.miscs;
 
-import rpg.enums.ItemType;
 import rpg.items.Item;
 
-// Clase para objetos de tipo Poción
-public class Misc extends Item {
+import java.io.Serializable;
 
-    private String effect;
-    private int potency;
-    private int duration;
+/**
+ * The type Misc.
+ */
+public abstract class Misc extends Item implements Serializable  {
 
-    public Misc(String name, String description, int price, String effect, int potency, int duration, ItemType itemType) {
-        super(name, description, price, itemType);
-        this.effect = effect;
-        this.potency = potency;
-        this.duration = duration;
+    /**
+     * The Consumable.
+     */
+    protected boolean consumable;
+    /**
+     * The Stackable.
+     */
+    protected boolean stackable;
+    protected int quantity;
+    protected int maxQuantity;
+
+    public Misc() {
+        super();
+        maxQuantity = 99;
     }
 
-    public String getEffect() {
-        return effect;
+    /**
+     * Use.
+     */
+    public abstract void use();
+
+    public boolean isConsumable() {
+        return consumable;
     }
 
-    public int getPotency() {
-        return potency;
+    public boolean isStackable() {
+        return stackable;
     }
 
-    public int getDuration() {
-        return duration;
+    public int getQuantity() {
+        return quantity;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " - Effect: " + effect + ", Potency: " + potency + ", Duration: " + duration + "s";
+    public void increaseQuantity(int amount) {
+        quantity += amount;
+        if (quantity > maxQuantity) {
+            quantity = maxQuantity;
+        }
+    }
+
+    public void decreaseQuantity(int amount) {
+        quantity -= amount;
+        if (quantity < 0) {
+            quantity = 0;
+        }
     }
 }
-

@@ -1,18 +1,29 @@
-package rpg.Utils.cache;
+package rpg.utils.cache;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
+/**
+ * Clase que se encarga de cargar las fuentes.
+ */
 public class FontLoader {
 
-    public static Font loadFont(String fontPath) {
+    /**
+     * Método que se encarga de cargar una fuente.
+     *
+     * @param path Ruta de la fuente.
+     * @return La fuente ya cargada en formato simple y tamaño 12px. En caso de error se regresará la fuente Arial 12.
+     */
+    public static Font loadFont(String path) {
+
         try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(fontPath)).deriveFont(Font.PLAIN, 12); // Tamaño por defecto
-        } catch (FontFormatException | IOException e) {
-            System.err.println("Error loading font from path: " + fontPath);
-            e.printStackTrace();
-            return null; // Retorna null si hay un error
+
+            return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(12f);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar la fuente: " + path,
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return Font.getFont("Arial").deriveFont(12f);
     }
 }

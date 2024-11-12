@@ -1,4 +1,4 @@
-package rpg.gui.InternalFrames;
+package rpg.gui.internalFrames;
 
 import javax.swing.*;
 
