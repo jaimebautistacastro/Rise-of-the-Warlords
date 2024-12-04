@@ -26,7 +26,7 @@ public class Player extends GameCharacter implements Serializable {
     public Player(String name) {
 
         super(name);
-        inventory = new Inventory();
+        inventory = new Inventory ();
     }
 
     public void save(int slot) {
