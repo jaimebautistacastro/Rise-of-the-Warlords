@@ -34,7 +34,7 @@ public class Player extends GameCharacter implements Serializable {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("files/save" + slot + ".dat"));
             out.writeObject(this);
-            out.close();
+            out.close ();
             System.out.println("Game saved");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error saving the game");
