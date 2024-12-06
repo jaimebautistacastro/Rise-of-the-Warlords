@@ -31,6 +31,9 @@ public interface UIConstants {
     /**
      * Margen simple.
      */
+    int INTERNAL_FRAME_HEADER_HEIGHT = 77;
+    int STATUS_FRAME_WIDTH = 565;
+    int STATUS_FRAME_HEIGHT = 715;
     int SIMPLE_MARGIN = 18;
     int CORNER_WIDTH = 52;
     int CORNER_HEIGHT = 77;

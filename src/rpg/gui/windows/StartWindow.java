@@ -9,7 +9,6 @@ import rpg.gui.labels.NameLabel;
 import rpg.gui.panels.FilesPanel;
 import rpg.gui.ui.NameLabelUI;
 import rpg.utils.FileManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;

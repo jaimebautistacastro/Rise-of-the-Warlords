@@ -2,9 +2,9 @@ package rpg.gui.windows;
 
 import rpg.entities.Player;
 import rpg.entities.enemies.Enemy;
+import rpg.factory.EnemyFactory;
 import rpg.enums.BarType;
 import rpg.enums.Stats;
-import rpg.factory.EnemyFactory;
 import rpg.gui.UIConstants;
 import rpg.gui.buttons.*;
 import rpg.gui.internalFrames.StatusFrame;
@@ -45,14 +45,9 @@ public class MainWindow extends JFrame {
     private JPanel messagePanel;
     private JPanel enemyPanel;
     private JDesktopPane desktopPane;
-    private final JInternalFrame internalFrame;
-    private Player player;
-    private Enemy enemy;
+    Player player;
+    Enemy enemy;
     int slot;
-
-    public static void main(String[] args) {
-        new MainWindow(new Player("Juan"), 0);
-    }
 
     public MainWindow(Player player, int slot) {
 
@@ -62,8 +57,7 @@ public class MainWindow extends JFrame {
         ((BarLabel) lifeLabel).updateBar(player.getStats().get(Stats.HP), player.getStats().get(Stats.MAX_HP));
         ((BarLabel) magicLabel).updateBar(player.getStats().get(Stats.MP), player.getStats().get(Stats.MAX_MP));
         ((BarLabel) expLabel).updateBar(player.getStats().get(Stats.EXPERIENCE), player.getStats().get(Stats.NEEDED_EXPERIENCE));
-        internalFrame = new StatusFrame();
-        desktopPane.add(internalFrame, JLayeredPane.PALETTE_LAYER);
+        // Añadimos un mensaje al textDisplay de bienvenida
         appendText("¡Bienvenido a RPG Game!\n");
         appendText("¡Prepárate para la aventura!\n");
         appendText("Aparece un nuevo enemigo: " + enemy.getName() + "\n");
@@ -112,6 +106,7 @@ public class MainWindow extends JFrame {
         textDisplay.setEditable(false);
         textDisplay.setLineWrap(true);
         textDisplay.setWrapStyleWord(true);
+        goldLabel.setText(player.getStats().get(Stats.GOLD) + "G");
     }
 
     /**
@@ -184,6 +179,8 @@ public class MainWindow extends JFrame {
             // Asignamos la nueva experiencia y oro al jugador
             player.getStats().put(Stats.EXPERIENCE, totalExp);
             player.getStats().put(Stats.GOLD, totalGold);
+            goldLabel.setText(totalGold + "G");
+            goldLabel.repaint();
             // Evaluamos si el jugador ha subido de nivel
             if (totalExp >= promotionExp)
                 updatePlayer();
@@ -261,11 +258,11 @@ public class MainWindow extends JFrame {
         atacarButton = new AttackButton(this);
         habilidadesButton = new SkillPanelButton();
         huirButton = new FleeButton(this);
-        exampleLabel = new PortraitLabel();
+        exampleLabel = new PortraitLabel(this);
         lifeLabel = new BarLabel(0, 0, BarType.LIFE);
         magicLabel = new BarLabel(0, 0, BarType.MAGIC);
         expLabel = new BarLabel(0, 0, BarType.EXPERIENCE);
-        goldLabel = new GoldLabel();
+        goldLabel = new GoldLabel(player.getStats().get(Stats.GOLD));
         nameLabel = new NameLabel(String.format("%s LVL. %d", player.getName(),
                 player.getStats().get(Stats.LEVEL)));
         playerSprite = new PlayerSpriteLabel();

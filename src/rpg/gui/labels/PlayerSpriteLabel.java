@@ -8,7 +8,7 @@ public class PlayerSpriteLabel extends PortraitLabel {
 
     public PlayerSpriteLabel() {
 
-        super();
+        super(null);
     }
 
     @Override

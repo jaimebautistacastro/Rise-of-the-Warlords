@@ -5,6 +5,9 @@ import rpg.utils.cache.ImageCache;
 
 import javax.swing.*;
 
+/**
+ * Creamos la clase goblingeneral
+ */
 public class GoblinGeneral extends RookieGoblin {
 
     public GoblinGeneral() {

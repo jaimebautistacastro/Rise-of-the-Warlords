@@ -1,7 +1,9 @@
 package rpg.items;
 
 import rpg.enums.ItemType;
+import rpg.utils.cache.ImageCache;
 
+import javax.swing.*;
 import java.io.Serializable;
 
 /**
@@ -13,6 +15,7 @@ public abstract class Item implements Serializable {
      * The Name.
      */
     protected String name;
+    protected String iconName;
     /**
      * The Description.
      */
@@ -55,5 +58,11 @@ public abstract class Item implements Serializable {
 
     public ItemType getType() {
         return type;
+    }
+
+    public ImageIcon getIcon() {
+        return new ImageIcon(ImageCache
+                .getImage(iconName)
+                .getScaledInstance(32, 32, 0));
     }
 }

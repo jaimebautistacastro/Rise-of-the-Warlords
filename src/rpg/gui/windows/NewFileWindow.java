@@ -34,7 +34,7 @@ public class NewFileWindow extends JFrame {
 
     private void createUIComponents() {
         mainPanel = new NewPlayerPanel();
-        portraitLabel = new PortraitLabel();
+        portraitLabel = new PortraitLabel(null);
         infoLabel = new JLabel();
         infoLabel.setOpaque(false);
         infoLabel.setFont(new Font("Retron", Font.BOLD, 18));

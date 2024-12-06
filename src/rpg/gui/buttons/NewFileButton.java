@@ -1,5 +1,6 @@
 package rpg.gui.buttons;
 
+import rpg.gui.buttons.events.NewPlayerEvent;
 import rpg.gui.windows.StartWindow;
 
 public class NewFileButton extends UserButton {
@@ -11,5 +12,6 @@ public class NewFileButton extends UserButton {
 
         super("Nueva Partida");
         this.slot = slot;
+        addActionListener(new NewPlayerEvent(slot, startWindow));
     }
 }
