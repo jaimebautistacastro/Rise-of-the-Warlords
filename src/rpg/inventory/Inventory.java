@@ -10,21 +10,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The type Inventory.
+ * La clase Inventory representa un inventario de objetos en el juego.
+ * Un inventario puede contener diferentes tipos de objetos (armaduras, misceláneos, etc.)
+ * y proporciona métodos para agregar, eliminar y gestionar dichos objetos.
  */
 public class Inventory implements Serializable {
 
     /**
-     * The Items.
+     * La lista de objetos almacenados en el inventario.
      */
     private final ArrayList<Item> items;
+
     /**
-     * The Capacity.
+     * La capacidad máxima del inventario.
      */
     private int capacity;
 
     /**
-     * Instantiates a new Inventory.
+     * Crea un nuevo inventario con una capacidad inicial de 15 objetos.
      */
     public Inventory() {
         this.capacity = 15;
@@ -32,45 +35,56 @@ public class Inventory implements Serializable {
     }
 
     /**
-     * Add item.
+     * Agrega un objeto al inventario.
+     * Si el inventario está lleno, lanza una excepción InventoryFullException.
      *
-     * @param item the item
+     * @param item El objeto a agregar al inventario.
      */
     public void addItem(Item item) {
 
         try {
-
-            if (!isFull())
+            if (!isFull()) {
                 items.add(item);
-            else
+            } else {
                 throw new InventoryFullException();
+            }
         } catch (InventoryFullException e) {
             System.out.println(e.getMessage());
         }
     }
 
     /**
-     * Remove item.
+     * Elimina un objeto del inventario.
+     * Si el objeto no se encuentra, se imprime un mensaje de error.
      *
-     * @param item the item
+     * @param item El objeto a eliminar del inventario.
      */
     public void removeItem(Item item) {
         try {
             items.remove(item);
         } catch (Exception e) {
-            System.out.println("Item not found");
+            System.out.println("Item no encontrado");
         }
     }
 
     /**
-     * Gets item.
+     * Obtiene un objeto del inventario por su índice.
      *
-     * @param index the index
+     * @param index El índice del objeto en el inventario.
+     * @return El objeto en la posición indicada.
      */
     public Item getItem(int index) {
         return items.get(index);
     }
 
+    /**
+     * Obtiene un objeto del inventario por su nombre.
+     * Si el objeto no se encuentra, lanza una excepción ItemNotFoundException.
+     *
+     * @param item El objeto que se busca por su nombre.
+     * @return El objeto encontrado en el inventario.
+     * @throws ItemNotFoundException Si el objeto no se encuentra.
+     */
     public Item getItem(Item item) throws ItemNotFoundException {
 
         Item found = null;
@@ -87,42 +101,43 @@ public class Inventory implements Serializable {
     }
 
     /**
-     * Gets item count.
+     * Obtiene la cantidad total de objetos en el inventario.
+     *
+     * @return El número de objetos en el inventario.
      */
     public int getItemCount() {
         return items.size();
     }
 
     /**
-     * Is full boolean.
+     * Verifica si el inventario está lleno.
      *
-     * @return the boolean
+     * @return true si el inventario está lleno, false si hay espacio disponible.
      */
     public boolean isFull() {
-
         return items.size() == capacity;
     }
 
     /**
-     * Is empty boolean.
+     * Verifica si el inventario está vacío.
      *
-     * @return the boolean
+     * @return true si el inventario está vacío, false si contiene objetos.
      */
     public boolean isEmpty() {
         return items.isEmpty();
     }
 
     /**
-     * Clear.
+     * Limpia el inventario, eliminando todos los objetos.
      */
     public void clear() {
         items.clear();
     }
 
     /**
-     * Increase capacity.
+     * Aumenta la capacidad del inventario en una cantidad especificada.
      *
-     * @param amount the amount
+     * @param amount La cantidad en la que se incrementa la capacidad del inventario.
      */
     public void increaseCapacity(int amount) {
         capacity += amount;
@@ -130,12 +145,11 @@ public class Inventory implements Serializable {
     }
 
     /**
-     * Gets armors.
+     * Obtiene una lista de las armaduras en el inventario.
      *
-     * @return the armors
+     * @return Una lista de objetos Armor que están en el inventario.
      */
     public ArrayList<Armor> getArmors() {
-
         ArrayList<Armor> armors = new ArrayList<>();
         for (Item item : items) {
             if (item instanceof Armor) {
@@ -146,12 +160,11 @@ public class Inventory implements Serializable {
     }
 
     /**
-     * Gets miscs.
+     * Obtiene una lista de los objetos misceláneos en el inventario.
      *
-     * @return the miscs
+     * @return Una lista de objetos Misc que están en el inventario.
      */
     public ArrayList<Misc> getMiscs() {
-
         ArrayList<Misc> miscs = new ArrayList<>();
         for (Item item : items) {
             if (item instanceof Misc) {
@@ -162,9 +175,9 @@ public class Inventory implements Serializable {
     }
 
     /**
-     * Gets items.
+     * Obtiene todos los objetos del inventario.
      *
-     * @return the items
+     * @return Una lista de todos los objetos almacenados en el inventario.
      */
     public ArrayList<Item> getItems() {
         return items;

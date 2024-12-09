@@ -1,4 +1,4 @@
-package rpg.utils;
+package rpg.Utils;
 
 import rpg.entities.Player;
 
@@ -6,10 +6,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
+/**
+ * La clase FileManager proporciona métodos para cargar y guardar el estado del juego en archivos.
+ * Utiliza la serialización para guardar y cargar los objetos del jugador. El estado del jugador se guarda
+ * en archivos con un formato binario.
+ */
 public class FileManager {
 
+    /**
+     * La ruta base donde se almacenan los archivos de guardado.
+     */
     private static final String BASE_PATH = "files/";
 
+    /**
+     * Carga el estado del jugador desde un archivo de guardado específico.
+     * El archivo es identificado por el número de ranura (slot), que se utiliza para nombrar el archivo.
+     *
+     * @param slot El número de ranura que representa el archivo de guardado (por ejemplo, ranura 1, ranura 2, etc.).
+     * @return El objeto Player que representa al jugador cargado desde el archivo.
+     * @throws FileNotFoundException Si no se encuentra el archivo de guardado en la ranura especificada.
+     */
     public static Player loadGame(int slot) throws FileNotFoundException {
 
         Player player;
@@ -23,6 +39,13 @@ public class FileManager {
         return player;
     }
 
+    /**
+     * Guarda el estado del jugador en un archivo de guardado específico.
+     * El archivo es identificado por el número de ranura (slot), que se utiliza para nombrar el archivo.
+     *
+     * @param player El objeto Player que representa al jugador a guardar.
+     * @param slot El número de ranura donde se guardará el archivo (por ejemplo, ranura 1, ranura 2, etc.).
+     */
     public static void saveGame(Player player, int slot) {
 
         ObjectOutputStream oos;

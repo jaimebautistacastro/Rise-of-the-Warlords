@@ -1,4 +1,4 @@
-package rpg.utils.cache;
+package rpg.Utils.cache;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ImageLoader {
 
     /**
-     * Método que se encarga de cargar una imagen.
+     * Metodo que se encarga de cargar una imagen.
      *
      * @param path Ruta de la imagen.
      * @return Imagen.

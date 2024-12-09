@@ -1,4 +1,4 @@
-package rpg.utils.cache;
+package rpg.Utils.cache;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class FontCache {
     public static final Map<String, Font> cache = new HashMap<>();
 
     /**
-     * Método que se encarga de añadir una fuente a la caché.
+     * Metodo que se encarga de añadir una fuente a la caché.
      *
      * @param fontName Nombre de la fuente.
      * @param fontPath Ruta de la fuente.
@@ -34,7 +34,7 @@ public class FontCache {
     }
 
     /**
-     * Método que se encarga de obtener una fuente de la caché.
+     * Metodo que se encarga de obtener una fuente de la caché.
      *
      * @param fontName Nombre de la fuente.
      * @param style    Estilo de la fuente.
@@ -47,7 +47,7 @@ public class FontCache {
     }
 
     /**
-     * Método que se encarga de obtener una fuente de la caché.
+     * Metodo que se encarga de obtener una fuente de la caché.
      *
      * @param fontName Nombre de la fuente.
      * @return Fuente a retornar de la caché o la fuente Arial en caso de que la fuente a buscar no exista.
@@ -58,7 +58,7 @@ public class FontCache {
     }
 
     /**
-     * Método que se encarga de obtener una fuente de la caché.
+     * Metodo que se encarga de obtener una fuente de la caché.
      *
      * @param fontName Nombre de la fuente.
      * @param size     Tamaño de la fuente.

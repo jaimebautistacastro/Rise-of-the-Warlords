@@ -1,4 +1,4 @@
-package rpg.utils.cache;
+package rpg.Utils.cache;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.io.File;
 public class FontLoader {
 
     /**
-     * Método que se encarga de cargar una fuente.
+     * Metodo que se encarga de cargar una fuente.
      *
      * @param path Ruta de la fuente.
      * @return La fuente ya cargada en formato simple y tamaño 12px. En caso de error se regresará la fuente Arial 12.

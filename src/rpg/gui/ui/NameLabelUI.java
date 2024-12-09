@@ -1,18 +1,27 @@
 package rpg.gui.ui;
 
 import rpg.gui.UIConstants;
-import rpg.utils.cache.ImageCache;
+import rpg.Utils.cache.ImageCache;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Clase personalizada para la interfaz de usuario de una etiqueta con nombre.
+ * Esta etiqueta se dibuja con imagenes a los lados y el texto en el centro.
+ */
 public class NameLabelUI extends GameLabelUI {
 
+    /**
+     * Arreglo de imagenes que forman parte de la etiqueta con nombre.
+     */
     private final BufferedImage[] icons;
 
+    /**
+     * Constructor de la clase, inicializa las imagenes para el nombre.
+     */
     public NameLabelUI() {
-
         super(null, null);
         icons = new BufferedImage[3];
         ImageCache.addImage("name_l", "labels/name_label_left.png");
@@ -23,6 +32,11 @@ public class NameLabelUI extends GameLabelUI {
         icons[2] = ImageCache.getImage("name_r");
     }
 
+    /**
+     * Metodo encargado de instalar los valores predeterminados para la etiqueta.
+     *
+     * @param c Etiqueta sobre la cual se aplican los valores predeterminados.
+     */
     @Override
     protected void installDefaults(JLabel c) {
 
@@ -37,6 +51,13 @@ public class NameLabelUI extends GameLabelUI {
         c.setPreferredSize(new Dimension(textWidth + 44, 51));
     }
 
+    /**
+     * Metodo encargado de pintar la etiqueta con nombre.
+     * Dibuja las imagenes a los lados del texto.
+     *
+     * @param g Graficos utilizados para pintar la etiqueta.
+     * @param c Componente JLabel que representa la etiqueta.
+     */
     @Override
     public void paint(Graphics g, JComponent c) {
 

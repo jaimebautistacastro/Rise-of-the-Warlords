@@ -1,4 +1,4 @@
-package rpg.utils.cache;
+package rpg.Utils.cache;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -44,7 +44,7 @@ public class ImageCache {
     }
 
     /**
-     * Método que se encarga de obtener el tamaño de la caché.
+     * Metodo que se encarga de obtener el tamaño de la caché.
      *
      * @param imageName Nombre de la imagen.
      * @return ImageIcon de la imagen a retornar de la caché o null en caso de que la imagen a buscar no exista.

@@ -12,56 +12,72 @@ import java.io.*;
 import java.util.HashMap;
 
 /**
- * The type Player.
+ * Clase que representa al jugador del juego.
  */
 public class Player extends GameCharacter implements Serializable {
 
+    /**
+     * Inventario del jugador.
+     */
     private final Inventory inventory;
 
     /**
-     * Instantiates a new Player.
+     * Constructor que crea un nuevo jugador con un nombre especifico.
      *
-     * @param name the name
+     * @param name el nombre del jugador
      */
     public Player(String name) {
-
         super(name);
-        inventory = new Inventory ();
+        inventory = new Inventory();
     }
 
+    /**
+     * Guarda el estado del juego en un archivo.
+     *
+     * @param slot el numero de ranura para guardar
+     */
     public void save(int slot) {
-
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("files/save" + slot + ".dat"));
             out.writeObject(this);
-            out.close ();
-            System.out.println("Game saved");
+            out.close();
+            System.out.println("Juego guardado");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error saving the game");
+            JOptionPane.showMessageDialog(null, "Error al guardar el juego");
         }
     }
 
+    /**
+     * Carga el estado del juego desde un archivo.
+     *
+     * @param slot el numero de ranura de guardado
+     * @return el jugador cargado o null si ocurre un error
+     */
     public static Player load(int slot) {
-
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream
-                    ("files/save" + slot + ".dat"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("files/save" + slot + ".dat"));
             Player player = (Player) in.readObject();
             in.close();
             return player;
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Error loading the game");
+            JOptionPane.showMessageDialog(null, "Error al cargar el juego");
         }
         return null;
     }
 
+    /**
+     * Intenta huir de un combate.
+     *
+     * @return true si el jugador logra huir, false en caso contrario
+     */
     public boolean tryToFlee() {
-
         return Randomize.getRandomBoolean();
     }
 
+    /**
+     * Incrementa el nivel del jugador y mejora sus estadisticas.
+     */
     public void levelUp() {
-
         stats.put(Stats.LEVEL, stats.get(Stats.LEVEL) + 1);
         stats.put(Stats.MAX_HP, stats.get(Stats.MAX_HP) + Randomize.getRandomInt(5, 10));
         stats.put(Stats.HP, stats.get(Stats.MAX_HP));
@@ -74,12 +90,10 @@ public class Player extends GameCharacter implements Serializable {
     }
 
     /**
-     * Función sobrescrita que inicializa las características
-     * del personaje.
+     * Inicializa las caracteristicas del jugador.
      */
     @Override
     protected void initCharacter() {
-
         stats.put(Stats.LEVEL, 1);
         stats.put(Stats.MAX_HP, 100);
         stats.put(Stats.HP, 100);
@@ -92,8 +106,12 @@ public class Player extends GameCharacter implements Serializable {
         stats.put(Stats.GOLD, 0);
     }
 
+    /**
+     * Agrega un item al inventario del jugador.
+     *
+     * @param item el item a agregar
+     */
     public void addItemToInventory(Item item) {
-
         if (item instanceof Misc misc) {
             if (misc.isStackable()) {
                 boolean found = false;
@@ -117,8 +135,12 @@ public class Player extends GameCharacter implements Serializable {
         }
     }
 
+    /**
+     * Elimina un item del inventario del jugador.
+     *
+     * @param item el item a eliminar
+     */
     public void removeItemFromInventory(Item item) {
-
         if (item instanceof Misc misc) {
             if (misc.isStackable()) {
                 for (Item i : inventory.getMiscs()) {
@@ -138,8 +160,12 @@ public class Player extends GameCharacter implements Serializable {
         }
     }
 
+    /**
+     * Vende un item del inventario.
+     *
+     * @param item el item a vender
+     */
     public void sellItem(Item item) {
-
         try {
             Item getItem = inventory.getItem(item);
             if (getItem instanceof Misc misc) {
@@ -158,19 +184,20 @@ public class Player extends GameCharacter implements Serializable {
         }
     }
 
+    /**
+     * Muestra el contenido del inventario.
+     */
     public void showInventory() {
-
-        StringBuilder content = new StringBuilder("Inventory: \n");
+        StringBuilder content = new StringBuilder("Inventario: \n");
         String format = """
-                Name: %s, Price: %d
-                Description: %s
+                Nombre: %s, Precio: %d
+                Descripcion: %s
                 """;
         String formatQuantity = """
-                Name: %s, Price: %d, Quantity: %d
-                Description: %s
+                Nombre: %s, Precio: %d, Cantidad: %d
+                Descripcion: %s
                 """;
         for (Item item : inventory.getItems()) {
-
             if (item instanceof Misc misc) {
                 if (misc.isStackable()) {
                     content.append(String.format(formatQuantity, item.getName(),
@@ -187,6 +214,11 @@ public class Player extends GameCharacter implements Serializable {
         JOptionPane.showMessageDialog(null, content.toString());
     }
 
+    /**
+     * Devuelve el inventario del jugador.
+     *
+     * @return el inventario
+     */
     public Inventory getInventory() {
         return inventory;
     }

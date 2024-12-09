@@ -8,78 +8,79 @@ import java.util.HashMap;
 
 /**
  * Clase que representa a un personaje del juego.
+ * Define atributos y comportamientos comunes para todos los personajes.
  */
 public abstract class GameCharacter implements Serializable {
+
     /**
      * Nombre del personaje.
      */
     protected String name;
+
     /**
-     * Características del personaje.
+     * Caracteristicas del personaje, almacenadas en un mapa.
      */
     protected HashMap<Stats, Integer> stats;
 
     /**
-     * Instantiates a new Game character.
+     * Construye un nuevo personaje del juego con un nombre especifico.
      *
-     * @param name the name
+     * @param name el nombre del personaje
      */
     public GameCharacter(String name) {
-
         this.name = name;
         this.stats = new HashMap<>();
         initCharacter();
     }
 
     /**
-     * Función que inicializa las características del personaje.
-     * Implementada por las clases hijas.
-     * Deberá de incluir el nombre del personaje y las características mínimas para su funcionamiento.
+     * Metodo abstracto que inicializa las caracteristicas del personaje.
+     * Debe ser implementado por las clases hijas.
+     * Se utiliza para establecer el nombre y las estadisticas basicas.
      */
     protected abstract void initCharacter();
 
     /**
-     * Is alive boolean.
+     * Verifica si el personaje esta vivo.
      *
-     * @return the boolean
+     * @return true si el personaje tiene mas de 0 HP, false en caso contrario
      */
     public boolean isAlive() {
         return stats.get(Stats.HP) > 0;
     }
 
     /**
-     * Función que simula un ataque del personaje al enemigo e imprime un mensaje
-     * en consola con el resultado del ataque. Si el daño es mayor a 0, se resta
-     * la cantidad de daño a la vida del enemigo. Si el daño es menor o igual a 0,
-     * se imprime un mensaje indicando que no se hizo daño.
+     * Simula un ataque del personaje hacia un enemigo.
+     * Si el ataque causa daño, se reduce la vida del enemigo.
+     * En caso de que el enemigo muera, lanza una excepcion y actualiza sus stats.
      *
-     * @param enemy el enemigo a atacar.
+     * @param enemy el enemigo al que se ataca
+     * @return un mensaje que describe el resultado del ataque
      */
     public String attack(GameCharacter enemy) {
-
         String message = "";
         String enemyName = enemy.getName();
         int damage = this.stats.get(Stats.ATTACK) - enemy.getStats().get(Stats.DEFENSE);
         int newHP = enemy.getStats().get(Stats.HP);
-        if (damage > 0) {
 
+        if (damage > 0) {
             try {
                 newHP = reduceHP(enemy, damage);
                 message += String.format("""
-                        ¡%s ataca a %s por %d de daño!
+                        ¡%s ataca a %s por %d de dano!
                         %s tiene %d HP restantes.
                         """, this.name, enemyName, damage, enemyName, newHP);
             } catch (EnemyDeathException e) {
                 enemy.getStats().put(Stats.HP, 0);
                 message += String.format("""
-                        %s attacks %s for %d damage!
-                        %s has 0 HP left.
-                        %s has died.
+                        ¡%s ataca a %s por %d de dano!
+                        %s tiene 0 HP restantes.
+                        %s ha muerto.
                         """, this.name, enemyName, damage, enemyName, enemyName);
             }
         } else {
             message += String.format("""
-                    ¡%s ataca a %s pero no hace daño!
+                    ¡%s ataca a %s pero no hace dano!
                     %s tiene %d HP restantes.
                     """, this.name, enemyName, enemyName, newHP);
         }
@@ -87,38 +88,38 @@ public abstract class GameCharacter implements Serializable {
     }
 
     /**
-     * Función que reduce la vida del enemigo y actualiza sus características.
+     * Reduce la vida del enemigo y actualiza sus estadisticas.
+     * Si el enemigo muere, lanza una excepcion.
      *
-     * @param enemy  el enemigo a atacar.
-     * @param damage el daño a realizar.
-     * @return la nueva vida del enemigo.
+     * @param enemy  el enemigo al que se realiza el ataque
+     * @param damage el dano infligido
+     * @return la nueva cantidad de HP del enemigo
+     * @throws EnemyDeathException si el enemigo muere
      */
     protected final int reduceHP(GameCharacter enemy, int damage) throws EnemyDeathException {
-
         int newHP = enemy.getStats().get(Stats.HP) - damage;
         enemy.getStats().put(Stats.HP, newHP);
-        if (!enemy.isAlive())
+        if (!enemy.isAlive()) {
             throw new EnemyDeathException();
+        }
         return newHP;
     }
 
     /**
-     * Devuelve el nombre del personaje con un epíteto.
+     * Devuelve el nombre del personaje.
      *
-     * @return el nombre del personaje con el epíteto.
+     * @return el nombre del personaje
      */
     public final String getName() {
-
         return String.format("%s", name);
     }
 
     /**
-     * Gets stats.
+     * Devuelve las estadisticas del personaje.
      *
-     * @return the stats
+     * @return un mapa con las estadisticas del personaje
      */
     public final HashMap<Stats, Integer> getStats() {
-
         return stats;
     }
 }

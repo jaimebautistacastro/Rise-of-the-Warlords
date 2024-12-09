@@ -6,7 +6,7 @@ import rpg.enums.EnemyType;
 import rpg.enums.Stats;
 import rpg.exceptions.EnemyDeathException;
 import rpg.utils.Randomize;
-import rpg.utils.cache.ImageCache;
+import rpg.Utils.cache.ImageCache;
 
 import javax.swing.*;
 

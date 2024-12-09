@@ -1,6 +1,6 @@
 package rpg.gui;
 
-import rpg.utils.cache.FontCache;
+import rpg.Utils.cache.FontCache;
 
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
