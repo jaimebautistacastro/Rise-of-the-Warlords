@@ -41,7 +41,7 @@ public class StartWindow extends JFrame {
     private JButton loadFile5;
 
     /**
-     * Método principal para lanzar la ventana de inicio del juego.
+     * Metodo principal para lanzar la ventana de inicio del juego.
      * Crea una instancia de la ventana y la muestra al usuario.
      *
      * @param args Los argumentos de la línea de comandos (no se usan aquí).
